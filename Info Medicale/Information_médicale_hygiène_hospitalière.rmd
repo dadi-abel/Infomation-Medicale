@@ -1,0 +1,188 @@
+---
+title: "Contrôle de connaissance information médicale et hygiène hospitalière"
+author: "Dadi Abel"
+date: "17/02/2021"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# I. EVALUATION D'UN TEST DIAGNOSTIQUE :
+
+## Résultats de la première équipe:
+
+```{r message=FALSE}
+resultat.equipe1 <- t(matrix(c(499,3,502,1,497,498,500,500,1000), ncol = 3,nrow = 3))
+colnames(resultat.equipe1) <- c("infarctus","pas d'infarctus","total")
+rownames(resultat.equipe1) <- c("troponine augmentée","troponine normale","total")
+require(knitr)
+kable(resultat.equipe1)
+
+```
+
+### Question 1 : parmi les 4 indicateurs de performance diagnostique de base (sensibilité, spécificité, valeur prédictive positive et valeur prédictive négative) quels sont ceux qui peuvent être mesurés directement par l'équipe 1 (justifiez votre réponse).
+
+Parmi les 4 indicateurs de performance diagnostique de base (sensibilité, spécificité, valeur
+prédictive positive et valeur prédictive négative) ceux qui peuvent être mesurés directement par
+l'équipe 1 sont : la sensibilité et spécificité à cause de la manière de constituer l'échantiollons (il ya deux échantillons un malade et un autre non malade)
+
+### Question 2 : indiquez comment vous calculer ces indicateurs et quelle est leur signification.
+
+```{r}
+# VP/(VP + FN) = sensibilité (Se)
+(Se <- (resultat.equipe1[1,1]/(resultat.equipe1[3,1]))*100)
+
+# VN/(FP + VN) = spécificité (Sp)
+(Sp <- (resultat.equipe1[2,2]/resultat.equipe1[3,2])*100)
+```
+
+Signification:
+La sensibilité est la probabilité (p) du résultat positif du test (T+) chez les sujets porteurs de la maladie (M+) 
+99.8% des malades qui sont atteint d'infarctus du myocarde ont une troponine qui a augmenté.
+
+Spécificité est la probabilité du résultat négatif de test (T-) chez les patients définis comme non malades (M-)
+99.4% des étudiants volontaires pour l'étude qui n'ont pas d'infarctus du myocarde ont une troponine normale.
+
+## Résultats de la deuxiéme équipe:
+
+```{r}
+resultat.equipe2 <- t(matrix(c(245,285,530,5,4465,4470,250,4750,5000), ncol = 3,nrow = 3))
+colnames(resultat.equipe2) <- c("infarctus","pas d'infarctus","total")
+rownames(resultat.equipe2) <- c("troponine augmentée","troponine normale","total")
+kable(resultat.equipe2)
+```
+
+### Question 3 : parmi les 4 indicateurs de performance diagnostique de base (sensibilité, spécificité, valeur prédictive positive et valeur prédictive négative) quels sont ceux qui peuvent être mesurés directement par l'équipe 2 (justifiez votre réponse).
+Tous les 4 peuvent être mesurés par l'équipe 2 parcequ'on a un échantillon représentif de la population et non une certaine  catégorie de la population.
+
+### Question 4 : indiquez comment vous calculer ces indicateurs et quelle est leur signification.
+
+```{r}
+# VP/(VP + FN) = sensibilité (Se)
+(Se <- (resultat.equipe2[1,1]/(resultat.equipe2[3,1]))*100)
+
+# VN/(FP + VN) = spécificité (Sp)
+(Sp <- (resultat.equipe2[2,2]/resultat.equipe2[3,2])*100)
+
+# VP/(VP + FP) = valeur prédictive positive (VPP)
+(VPP <- (resultat.equipe2[1,1]/resultat.equipe2[1,3])*100)
+
+# VN/(FN + VN) = valeur prédictive négative (VPN)
+(VPN <- (resultat.equipe2[2,2]/resultat.equipe2[2,3])*100)
+```
+
+Signification:
+La probabilité d'avoir un test positif (troponine augmentée) quand on est malade (infarctus) est de 98%
+
+La probabilité d'avoir un test négatif (troponine normale) quand on n'est malade (pas d'infarctus) est de 94%
+
+La probabilité d'être malade (infarctus) quand le test est positif (troponine augmentée) est de 46.23%
+
+La probabilité de ne pas être malade (pas d'infarctus) quand le test est négatif (troponine normale) est de 99.89%
+
+
+# II. ESSAIS THERAPEUTIQUES
+
+### Question 5 : indiquez les 2 autres éléments nécessaires pour le calcul des effectifs, en précisant dans quel sens ils influent sur les effectifs à inclure.
+Les deux autres éléments nécessaire pour le calcul des effectifs à inclure sont: le risque d'erreur de 2ème espèce ($\beta$) et la différence attendue entre les résultats ($\Delta$). Ces deux indicateurs influent sur les effectifs à inclure de façon négative (si $\beta$ augmente l'effectifs à inclure diminu; et pour ce qui est du $\Delta$ s'il augmente l'effectifs à inclure diminu aussi vise vers ça)
+
+# III. EPIDEMIOLOGIE
+
+### Première étude
+```{r}
+etude1 <- t(matrix(c(30,70,100,14,86,100,44,156,200), ncol = 3,nrow = 3))
+colnames(etude1) <- c("prématuré (oui)","prématuré (non)","total")
+rownames(etude1) <- c("gémellité oui (exposé)","gémellité non (non exposé)","total")
+kable(etude1)
+```
+
+# Questions 6 : Pouvez-vous calculer le risque relatif de prématurité par rapport à la géméllité et si oui calculez-le. Pouvez-vous calculer l'odd's ratio et si oui calculez-le.
+
+```{r}
+# (a/e_1)/(c/e_0)
+(RR <- round((etude1[1,1]/etude1[1,3])/(etude1[2,1]/etude1[2,3]),2))
+
+# Odds ratio = VPxVN /(FPxFN).
+(Odds.ratio <- round((etude1[1,1]*etude1[2,2])/(etude1[2,1]*etude1[1,2]),2))
+
+```
+
+### Deuxiéme étude
+```{r}
+etude2 <- t(matrix(c(30,14,44,70,86,156,100,100,200), ncol = 3,nrow = 3))
+colnames(etude2) <- c("prématuré (oui)","prématuré (non)","total")
+rownames(etude2) <- c("gémellité oui (exposé)","gémellité non (non exposé)","total")
+kable(etude2)
+```
+
+### Questions 7 : Pouvez-vous calculer le risque relatif de prématurité par rapport à la géméllité et si oui calculez-le. Pouvez-vous calculer l'odd's ratio et si oui calculez-le.
+
+Non: le risque relatif ne peut pas être mesuré dans le cas d’une étude cas - témoins 
+Oui: l'Odds ratio est toujours mesurable quelle que soit le type d’étude (cohorte, cas – témoins, exposés – non exposés)
+
+```{r}
+# Odds ratio = VPxVN /(FPxFN).
+(Odds.ratio <- round((etude2[1,1]*etude2[2,2])/(etude2[2,1]*etude2[1,2]),2))
+```
+
+# IV. HYGIENE HOSPITALIERE
+
+```{r}
+mois <- c("janvier" ,"février" ,"mars" ,"avril" ,"mai" ,"juin" ,"juillet" ,"août" ,"septembre" ,"octobre" ,"novembre" ,"décembre")
+nb.infection <- c(4 ,3 ,6 ,2 ,4 ,5 ,4 ,3 ,5 ,7 ,4 ,3)
+rang <- c(1:12)
+don <- data.frame(cbind(rang,mois,nb.infection))
+don$rang <- as.numeric(don$rang)
+don$nb.infection <- as.numeric(don$nb.infection)
+kable(don)
+
+
+#Construisez la carte de contrôle correspondant aux données du tableau ci-dessus et indiquez comment vous expliquez à l'équipe d'hygiène la manière de s'en servir.
+
+carte <- function(don, cible=NULL){
+  n = length(don$nb.infection)
+  ok = rep(1, n)
+  lambda.old = mean(don$nb.infection)
+  lambda = 0
+  i.ok = don$nb.infection[ok==1]
+  while(lambda!=lambda.old)
+  {
+    lambda.old = mean(i.ok)
+    lim.sup1 = qpois(0.95, lambda.old)
+    for(i in 1:n)
+    {
+      if(don$nb.infection[i]>=lim.sup1) { ok[i] = 0 }
+    }
+    i.ok = don$nb.infection[ok==1]
+    lambda = mean(i.ok)
+  }
+  if(is.null(cible)==FALSE) { lambda = cible }
+  lim.sup1 = qpois(0.95, lambda)
+  lim.sup2 = qpois(0.99, lambda)
+  couleur = c() ; symbole = c()
+  for(i in 1:n)
+  {
+    if(don$nb.infection[i]>=lim.sup1) { couleur[i] = "orange"; symbole[i] = 17}
+    if(don$nb.infection[i]>=lim.sup2) { couleur[i] = "red" ; symbole[i] = 17}
+    if(don$nb.infection[i]<lim.sup1) { couleur[i] = "blue" ; symbole[i] = 16 } 
+    }
+plot(don$rang, don$nb.infection, xlab="Temps (rang chronologique des mois)",ylab="Nombre d'infection", cex=1.7, col=couleur, pch=symbole, main="Carte de contrôle")
+abline(h=lambda, col="green")
+abline(h=lim.sup1,col="orange")
+abline(h=lim.sup2,col="red")
+}
+x11()
+carte(don, cible =NULL)
+  
+```
+
+INTERPRETATION:
+Nous constatons un oscillation aléatoire autour de la cîble
+La courbe de nos résultats oscille de façon aléatoire de chaque coté de la valeur cible entre les limites de contrôle. Cela signifie que notre procédé analytique est sous contrôle. C'est à dire que l'infection est sous controle.
+
+
+
